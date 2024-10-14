@@ -1,19 +1,36 @@
 // src/app/page.tsx
 
-
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { useSession } from "next-auth/react";
+import AuthHomeView from "@/sections/AuthHomeView"; // Komponent pre prihlásených používateľov
+import NonAuthHomeView from "@/sections/NonAuthHomeView"; // Komponent pre neprihlásených používateľov
+import { Box, CircularProgress } from "@mui/material";
 
 export const metadata = { title: "Domov | ZoškaSnap" };
 
 export default function Home() {
-
-  return (
-    <Container> 
+  <Container> 
       <Typography> Domovská stránka </Typography>
     </Container>
+  const { data: session, status } = useSession(); // Používanie useSession na získanie informácií o používateľovi
+  if (status === 'loading') {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+        <CircularProgress />
+      </Box>
+    );
+  }
 
-  );
+  // Ak používateľ nie je prihlásený, zobraz NonAuthHomeView
+  if (!session) {
+    return <NonAuthHomeView />;
+  }
+
+  // Ak používateľ je prihlásený, zobraz AuthHomeView
+  return <AuthHomeView />;
+
+
 }
 
 
