@@ -2,16 +2,16 @@
 
 import { Box } from "@mui/material";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
+export default function PrivateLayout({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (session) {
-      router.push("/private");  // Ak je prihlásený, presmeruj ho na private
+    if (!session) {
+      router.push("/auth/registracia");  // Ak nie je prihlásený, presmeruj na registráciu
     }
   }, [session, router]);
 
